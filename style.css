@@ -20,7 +20,5 @@ thead th:nth-child(2) {
 
 .error {
     color: red;
-    font-size: 0.9em;
-    height: 20px; 
     display: none;
 }
