@@ -1,3 +1,94 @@
+/**
+ * Létrehoz egy dinamikus űrlapot
+ * @returns {HTMLFormElement} A létrehozott űrlap elem
+ */
+function generateForm() {
+    // Űrlap létrehozása és beállítása
+    const form = document.createElement('form');
+    form.id = 'form';
+    form.action = '#';
+
+    // Az űrlap mezőinek adatai
+    const fields = [
+        {
+            label: 'Származás:',
+            type: 'text',
+            id: 'szarmazas',
+            errorText: 'Kötelező mező'
+        },
+        {
+            label: '1. szerző:',
+            type: 'text',
+            id: 'szerzo1',
+            errorText: 'Kötelező mező'
+        },
+        {
+            label: '1. szerző műve:',
+            type: 'text',
+            id: 'szerzo1mu',
+            errorText: 'Kötelező mező'
+        },
+        {
+            label: '2. szerző:',
+            type: 'text',
+            id: 'szerzo2',
+            errorText: 'Ki kell tölteni'
+        },
+        {
+            label: '2. szerző műve:',
+            type: 'text',
+            id: 'szerzo2mu',
+            errorText: 'Ki kell tölteni'
+        }
+    ];
+
+    // Mezők hozzáadása for ciklussal
+    for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
+        // Div létrehozása az adott mezőhöz
+        const div = document.createElement('div');
+
+        // Label létrehozása és beállítása
+        const label = document.createElement('label');
+        label.htmlFor = field.id;
+        label.textContent = field.label;
+        div.appendChild(label);
+        div.appendChild(document.createElement('br'));
+
+        // Input mező létrehozása 
+        const input = document.createElement('input');
+        input.type = field.type;
+        input.id = field.id;
+        input.name = field.id;
+        div.appendChild(input);
+
+        // Hibajelző span létrehozása
+        const span = document.createElement('span');
+        span.id = 'error-' + field.id;
+        span.className = 'error';
+        span.textContent = field.errorText;
+        div.appendChild(span);
+
+        // Új sor beszúrása a tagoltság érdekében
+        div.appendChild(document.createElement('br'));
+
+        // A div hozzáadása az űrlaphoz, majd egy extra sortörés
+        form.appendChild(div);
+        form.appendChild(document.createElement('br'));
+    }
+
+    // Submit gomb létrehozása és hozzáadása az űrlaphoz
+    const button = document.createElement('button');
+    button.type = 'submit';
+    button.textContent = 'Hozzáadás';
+    form.appendChild(button);
+
+    // Az űrlap hozzáadása a dokumentum body részéhez
+    document.body.appendChild(form);
+    return form;
+}
+const formElement = generateForm();
+
 const table = document.createElement('table');
 document.body.appendChild(table);
 
@@ -170,9 +261,8 @@ function complexValidation(szerzo2Element, szerzo2muElement) {
     return true;
 }
 
-const form = document.getElementById('form')
 
-form.addEventListener('submit', function (event) {
+formElement.addEventListener('submit', function (event) {
     event.preventDefault();
 
     // Input elemek lekérése
@@ -193,7 +283,7 @@ form.addEventListener('submit', function (event) {
     const validSzerzo1mu = validateField(szerzo1mu, errorSzerzo1mu);
 
     if (!(validSzarmazas && validSzerzo1 && validSzerzo1mu)) {
-        return; // Ha bármelyik kötelező mező nincs kitöltve, ne folytassuk
+        return;
     }
 
     // Opcionális mezők validálása
@@ -212,11 +302,11 @@ form.addEventListener('submit', function (event) {
 
     const tbody = table.querySelector('tbody');
 
-    // Ha mindkét "2. szerző" mező ki van töltve, 2 sort adunk hozzá (összevont első cellával)
+    // Ha mindkét 2.szerző mező ki van töltve, 2 sort adunk hozzá
     if (newElement.szerzo2 && newElement.mu2) {
         const row = document.createElement('tr');
         tbody.appendChild(row);
-        createCell(row, newElement.nemzetiseg, 2); // Összevont cella (rowSpan = 2)
+        createCell(row, newElement.nemzetiseg, 2);
         createCell(row, newElement.szerzo1);
         createCell(row, newElement.mu1);
 
@@ -232,5 +322,5 @@ form.addEventListener('submit', function (event) {
         createCell(row, newElement.szerzo1);
         createCell(row, newElement.mu1);
     }
-    form.reset()
+    formElement.reset()
 });
