@@ -142,7 +142,7 @@ function addElssoSzerzoEsMu(row, item) {
     createCell(row, item.mu1);
 }
 
-/**
+/** 
  * Táblázat generálása a megadott adatok alapján
  * @param {HTMLTableElement} table - A táblázat, amelyhez a törzs tartalmát hozzáadja
  * @param {Array<Object>} data A táblázat sorainak adatait tartalmazó tömb
@@ -157,30 +157,17 @@ function generateTable(table, data) {
         const row = document.createElement('tr');
         tbody.appendChild(row);
 
-        const nemzetisegCell = document.createElement('td');
-        nemzetisegCell.innerHTML = item.nemzetiseg;
-        nemzetisegCell.rowSpan = item.szerzo2 ? 2 : 1;
-        row.appendChild(nemzetisegCell);
-
-        const szerzo1Cell = document.createElement('td');
-        szerzo1Cell.innerHTML = item.szerzo1;
-        row.appendChild(szerzo1Cell);
-
-        const mu1Cell = document.createElement('td');
-        mu1Cell.innerHTML = item.mu1;
-        row.appendChild(mu1Cell);
+        // Nemzetiség cella létrehozása a megfelelő rowSpan értékkel
+        addNemzetisegCell(row, item);
+        // Első szerző és mű cellák hozzáadása
+        addElssoSzerzoEsMu(row, item);
 
         if (item.szerzo2) {
             const row2 = document.createElement('tr');
             tbody.appendChild(row2);
-
-            const szerzo2Cell = document.createElement('td');
-            szerzo2Cell.innerHTML = item.szerzo2;
-            row2.appendChild(szerzo2Cell);
-
-            const mu2Cell = document.createElement('td');
-            mu2Cell.innerHTML = item.mu2;
-            row2.appendChild(mu2Cell);
+            // Második szerző és mű cellák létrehozása (itt manuálisan hívjuk meg a createCell-t)
+            createCell(row2, item.szerzo2);
+            createCell(row2, item.mu2);
         }
     }
 }
